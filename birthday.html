@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f7dc6f); }
+        #canvas { display: block; position: absolute; top: 0; left: 0; }
+        #threeCanvas { display: none; }
+        .message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 48px; font-family: 'Arial', sans-serif; text-align: center; z-index: 10; opacity: 0; }
+        #countdown { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 100px; font-family: 'Arial', sans-serif; text-align: center; z-index: 20; display: none; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <div id="threeCanvas"></div>
+    <div id="message" class="message">Happy Birthday!</div>
+    <div id="countdown"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Draw heart function
+        function drawHeart() {
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            for (let i = 0; i < 300; i++) {
+                const k = i * 0.02;
+                const x = 15 * Math.sin(k)**3 * 20 + canvas.width / 2;
+                const y = -(12 * Math.cos(k) - 5 * Math.cos(2*k) - 2 * Math.cos(3*k) - Math.cos(4*k)) * 20 + canvas.height / 2 - 100;
+                ctx.arc(x, y, 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
+        drawHeart();
+
+        // Countdown
+        let count = 3;
+        const countdownEl = document.getElementById('countdown');
+        countdownEl.style.display = 'block';
+        countdownEl.innerText = count;
+
+        const countdownInterval = setInterval(() => {
+            count--;
+            if (count >= 0) {
+                countdownEl.innerText = count;
+            } else {
+                clearInterval(countdownInterval);
+                countdownEl.style.display = 'none';
+                canvas.style.display = 'none';
+                startThreeJS();
+            }
+        }, 1000);
+
+        function startThreeJS() {
+            document.getElementById('threeCanvas').style.display = 'block';
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('threeCanvas').appendChild(renderer.domElement);
+
+            // Add ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            // Add directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(0, 1, 1);
+            scene.add(directionalLight);
+
+            camera.position.z = 5;
+
+            // Create birthday items using actual media files
+            const items = [
+                { type: 'image', src: 'media/Pic1.jpeg', message: 'Wishing you a day filled with love and joy!' },
+                { type: 'image', src: 'media/Pic2.jpg', message: 'May all your dreams come true!' },
+                { type: 'video', src: 'media/Vid1.mp4', message: 'Here\'s to another year of adventures!' },
+                { type: 'image', src: 'media/Pic3.jpg', message: 'You are amazing and loved!' },
+                { type: 'image', src: 'media/Pic4.jpg', message: 'Cheers to you and your special day!' },
+                { type: 'video', src: 'media/Vid2.mp4', message: 'Happy Birthday, my dear friend!' }
+            ];
+
+            let currentIndex = 0;
+            const planes = [];
+            const videos = [];
+
+            items.forEach((item, index) => {
+                let texture;
+                if (item.type === 'image') {
+                    texture = new THREE.TextureLoader().load(item.src);
+                } else if (item.type === 'video') {
+                    const video = document.createElement('video');
+                    video.src = item.src;
+                    video.crossOrigin = 'anonymous';
+                    video.loop = true;
+                    video.muted = true;
+                    video.play();
+                    texture = new THREE.VideoTexture(video);
+                    videos.push(video);
+                }
+
+                const geometry = new THREE.PlaneGeometry(4, 3);
+                const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+                const plane = new THREE.Mesh(geometry, material);
+                plane.position.x = index * 10 - 25; // Space them out
+                plane.visible = false;
+                scene.add(plane);
+                planes.push(plane);
+            });
+
+            // Add 3D birthday elements
+            // Cake
+            const cakeGeometry = new THREE.CylinderGeometry(1, 1, 0.5, 32);
+            const cakeMaterial = new THREE.MeshLambertMaterial({ color: 0xff69b4 });
+            const cake = new THREE.Mesh(cakeGeometry, cakeMaterial);
+            cake.position.set(-5, -2, 0);
+            scene.add(cake);
+
+            // Candles on cake
+            for (let i = 0; i < 5; i++) {
+                const candleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.5, 8);
+                const candleMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+                const candle = new THREE.Mesh(candleGeometry, candleMaterial);
+                candle.position.set(-5 + (i - 2) * 0.3, -1.5, 0);
+                scene.add(candle);
+
+                // Flame
+                const flameGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+                const flameMaterial = new THREE.MeshBasicMaterial({ color: 0xff4500 });
+                const flame = new THREE.Mesh(flameGeometry, flameMaterial);
+                flame.position.set(-5 + (i - 2) * 0.3, -1.2, 0);
+                scene.add(flame);
+            }
+
+            // Floating hearts
+            for (let i = 0; i < 10; i++) {
+                const heartGeometry = new THREE.TorusGeometry(0.1, 0.05, 8, 16);
+                const heartMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+                const heart = new THREE.Mesh(heartGeometry, heartMaterial);
+                heart.position.set((Math.random() - 0.5) * 10, Math.random() * 5, (Math.random() - 0.5) * 10);
+                scene.add(heart);
+            }
+
+            // Show first item
+            planes[0].visible = true;
+            document.getElementById('message').innerText = items[0].message;
+            gsap.to('#message', { opacity: 1, duration: 2 });
+
+            // Animate camera to next item every 5 seconds
+            setInterval(() => {
+                gsap.to('#message', { opacity: 0, duration: 1, onComplete: () => {
+                    planes[currentIndex].visible = false;
+                    currentIndex = (currentIndex + 1) % items.length;
+                    planes[currentIndex].visible = true;
+                    document.getElementById('message').innerText = items[currentIndex].message;
+                    gsap.to('#message', { opacity: 1, duration: 2 });
+                    gsap.to(camera.position, { x: planes[currentIndex].position.x, duration: 2 });
+                }});
+            }, 5000);
+
+            // Add confetti effect (simple particles)
+            const confettiGeometry = new THREE.BufferGeometry();
+            const confettiMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 });
+            const confettiPositions = [];
+            for (let i = 0; i < 1000; i++) {
+                confettiPositions.push((Math.random() - 0.5) * 20);
+                confettiPositions.push(Math.random() * 10);
+                confettiPositions.push((Math.random() - 0.5) * 20);
+            }
+            confettiGeometry.setAttribute('position', new THREE.Float32BufferAttribute(confettiPositions, 3));
+            const confetti = new THREE.Points(confettiGeometry, confettiMaterial);
+            scene.add(confetti);
+
+            // Animate confetti
+            function animateConfetti() {
+                const positions = confetti.geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i + 1] -= 0.01; // Fall down
+                    if (positions[i + 1] < -5) positions[i + 1] = 10;
+                }
+                confetti.geometry.attributes.position.needsUpdate = true;
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                animateConfetti();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+    </script>
+</body>
+</html>
