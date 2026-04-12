@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 const pages = [
   {
-    title: 'Happy Birthday Sayang ❤️',
+    title: 'Happy Birthday Dear ❤️',
     media: [
       { type: 'image', src: '/media/Pic1.jpeg', alt: 'Birthday Photo 1' },
       { type: 'image', src: '/media/Pic2.jpg', alt: 'Birthday Photo 2' },
@@ -11,7 +11,7 @@ const pages = [
     hint: 'Tap anywhere to continue',
   },
   {
-    title: 'As long as you’re smiling, I’m happy. Stay happy, my love.',
+    title: 'As long as you’re smiling, I’m happy. Stay happy, my dear.',
     media: [
       { type: 'image', src: '/media/Pic3.jpg', alt: 'Birthday Photo 3' },
       { type: 'image', src: '/media/Pic4.jpg', alt: 'Birthday Photo 4' },
