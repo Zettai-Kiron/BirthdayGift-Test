@@ -22,11 +22,19 @@ const pages = [
   {
     title: 'You are my favorite story.',
     media: [
-      { type: 'video', src: '/media/Vid1.mp4', alt: 'Birthday Video 1' },
+      { type: 'image', src: '/media/Pic5.jpg', alt: 'Birthday Photo 5' },
       { type: 'video', src: '/media/Vid2.mp4', alt: 'Birthday Video 2' },
     ],
     caption: 'Chapter 3',
     hint: 'Tap anywhere for the surprise',
+  },
+  {
+    title: 'You are my favorite story.',
+    media: [
+      { type: 'image', src: '/media/Pic6.jpg', alt: 'Birthday Photo 6' },
+      { type: 'video', src: '/media/Vid3.mp4', alt: 'Birthday Video 3' },
+    ],
+  
   },
 ];
 
@@ -215,7 +223,7 @@ function Fireworks() {
       <canvas ref={canvasRef} className="fireworks-canvas" />
       <div className="final-message">
         <h1>Happy Birthday!</h1>
-        <p>The love story continues.</p>
+        <p>The Story continues.</p>
       </div>
     </div>
   );
