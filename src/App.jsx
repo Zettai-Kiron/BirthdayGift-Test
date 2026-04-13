@@ -9,7 +9,7 @@ const pages = [
   },
   {
     title: 'Every moment is special.',
-    media: [{ type: 'image', src: '/media/Pic2.jpg', alt: 'Birthday Photo 2' }],
+    media: [{ type: 'video', src: '/media/Vid1.mp4', alt: 'Birthday Video 1' }],
   },
   {
     title: 'As long as you’re smiling, I’m happy.',
@@ -17,11 +17,11 @@ const pages = [
   },
   {
     title: 'Stay happy, my dear.',
-    media: [{ type: 'image', src: '/media/Pic4.jpg', alt: 'Birthday Photo 4' }],
+    media: [{ type: 'video', src: '/media/Vid4.mp4', alt: 'Birthday Video 4' }],
   },
   {
     title: 'You are my favorite story.',
-    media: [{ type: 'image', src: '/media/Pic5.jpg', alt: 'Birthday Photo 5' }],
+    media: [{ type: 'image', src: '/media/Pic8.png', alt: 'Birthday Photo 5' }],
   },
   {
     title: 'A story I want to read forever.',
@@ -29,7 +29,7 @@ const pages = [
   },
   {
     title: 'You are a wonderful favorite story.',
-    media: [{ type: 'image', src: '/media/Pic6.jpg', alt: 'Birthday Photo 6' }],
+    media: [{ type: 'image', src: '/media/Pic4.jpg', alt: 'Birthday Photo 4' }],
   },
   {
     title: 'Our memories keep going...',
@@ -99,8 +99,8 @@ function HeartIntro({ onComplete }) {
     <div className="hero-screen">
       <canvas ref={canvasRef} className="heart-canvas" />
       <div className="countdown">{count >= 0 ? count : ''}</div>
-      <div className="hero-text">Happy Birthday</div>
-      <div className="subtext">Let's celebrate begin shall we?</div>
+      <div className="hero-text">Happy Birthday Dear</div>
+      <div className="subtext">Let's start the celebration!🥳🥳</div>
     </div>
   );
 }
@@ -120,7 +120,7 @@ function FloatingElements() {
       animationDelay: Math.random() * -20,
       scale: Math.random() * 0.8 + 0.6,
       rotateParams: `rotateX(${Math.random() * 360}deg) rotateY(${Math.random() * 360}deg)`,
-      depth: (Math.random() * 160) - 80 
+      depth: (Math.random() * 160) - 80
     }));
     setElements(items);
   }, []);
@@ -171,7 +171,7 @@ function GiftCard({ onFinish }) {
 
   function handleNext() {
     if (isAnimating) return;
-    
+
     // Confetti on click to make interactions feel more alive
     confetti({
       particleCount: 40,
@@ -289,8 +289,8 @@ function Fireworks() {
     <div className="fireworks-screen">
       <canvas ref={canvasRef} className="fireworks-canvas" />
       <div className="final-message">
-        <h1>Happy Birthday!</h1>
-        <p>The Story continues.</p>
+        <h1>Happy Birthday Dear!</h1>
+        <p>The Story continues. The future is definitely going to be great</p>
       </div>
     </div>
   );
