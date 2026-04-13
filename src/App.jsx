@@ -1,47 +1,46 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import confetti from 'canvas-confetti';
 
 const pages = [
   {
     title: 'Happy Birthday Dear ❤️',
-    media: [
-      { type: 'image', src: '/media/Pic1.jpeg', alt: 'Birthday Photo 1' },
-      { type: 'image', src: '/media/Pic2.jpg', alt: 'Birthday Photo 2' },
-    ],
-    caption: 'Chapter 1',
+    media: [{ type: 'image', src: '/media/Pic1.jpeg', alt: 'Birthday Photo 1' }],
     hint: 'Tap anywhere to continue',
   },
   {
-    title: 'As long as you’re smiling, I’m happy. Stay happy, my dear.',
-    media: [
-      { type: 'image', src: '/media/Pic3.jpg', alt: 'Birthday Photo 3' },
-      { type: 'image', src: '/media/Pic4.jpg', alt: 'Birthday Photo 4' },
-    ],
-    caption: 'Chapter 2',
-    hint: 'Tap anywhere to continue',
+    title: 'Every moment is special.',
+    media: [{ type: 'image', src: '/media/Pic2.jpg', alt: 'Birthday Photo 2' }],
+  },
+  {
+    title: 'As long as you’re smiling, I’m happy.',
+    media: [{ type: 'image', src: '/media/Pic3.jpg', alt: 'Birthday Photo 3' }],
+  },
+  {
+    title: 'Stay happy, my dear.',
+    media: [{ type: 'image', src: '/media/Pic4.jpg', alt: 'Birthday Photo 4' }],
   },
   {
     title: 'You are my favorite story.',
-    media: [
-      { type: 'image', src: '/media/Pic5.jpg', alt: 'Birthday Photo 5' },
-      { type: 'video', src: '/media/Vid2.mp4', alt: 'Birthday Video 2' },
-    ],
-    caption: 'Chapter 3',
-    hint: 'Tap anywhere for the surprise',
+    media: [{ type: 'image', src: '/media/Pic5.jpg', alt: 'Birthday Photo 5' }],
+  },
+  {
+    title: 'A story I want to read forever.',
+    media: [{ type: 'video', src: '/media/Vid2.mp4', alt: 'Birthday Video 2' }],
   },
   {
     title: 'You are a wonderful favorite story.',
-    media: [
-      { type: 'image', src: '/media/Pic6.jpg', alt: 'Birthday Photo 6' },
-      { type: 'video', src: '/media/Vid3.mp4', alt: 'Birthday Video 3' },
-    ],
-  
+    media: [{ type: 'image', src: '/media/Pic6.jpg', alt: 'Birthday Photo 6' }],
+  },
+  {
+    title: 'Our memories keep going...',
+    media: [{ type: 'video', src: '/media/Vid3.mp4', alt: 'Birthday Video 3' }],
   },
 ];
 
 function HeartIntro({ onComplete }) {
   const canvasRef = useRef(null);
   const countdownRef = useRef(null);
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(5);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -106,44 +105,87 @@ function HeartIntro({ onComplete }) {
   );
 }
 
+const floatingEmojis = ['🎂', '🕯️', '🎉', '🎁', '🎈', '🍰'];
+
+function FloatingElements() {
+  const [elements, setElements] = useState([]);
+
+  useEffect(() => {
+    // Generate an array of random floating objects
+    const items = Array.from({ length: 18 }).map((_, i) => ({
+      id: i,
+      emoji: floatingEmojis[Math.floor(Math.random() * floatingEmojis.length)],
+      left: Math.random() * 100,
+      animationDuration: Math.random() * 12 + 15,
+      animationDelay: Math.random() * -20,
+      scale: Math.random() * 0.8 + 0.6,
+      rotateParams: `rotateX(${Math.random() * 360}deg) rotateY(${Math.random() * 360}deg)`,
+      depth: (Math.random() * 160) - 80 
+    }));
+    setElements(items);
+  }, []);
+
+  return (
+    <div className="floating-container">
+      {elements.map((el) => (
+        <div
+          key={el.id}
+          className="floating-emoji"
+          style={{
+            '--left': `${el.left}%`,
+            '--duration': `${el.animationDuration}s`,
+            '--delay': `${el.animationDelay}s`,
+            '--scale': el.scale,
+            '--depth': `${el.depth}px`,
+            '--rotateParams': el.rotateParams
+          }}
+        >
+          {el.emoji}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function GiftCard({ onFinish }) {
   const [pageIndex, setPageIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // Periodic subtle confetti pops
+    const interval = setInterval(() => {
+      confetti({
+        particleCount: 25,
+        spread: 80,
+        origin: { y: 1.05 },
+        colors: ['#ff4d97', '#ff7cb4', '#ffffff', '#ffd700', '#a36eff'],
+        gravity: 0.6,
+        ticks: 200,
+        scalar: 1.2
+      });
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
-  const displayPages = useMemo(() => {
-    if (!isMobile) return pages;
-    const flatPages = [];
-    pages.forEach((p) => {
-      p.media.forEach((m, idx) => {
-        flatPages.push({
-          ...p,
-          media: [m],
-          caption: p.media.length > 1 ? `${p.caption} (${idx + 1}/${p.media.length})` : p.caption,
-        });
-      });
-    });
-    return flatPages;
-  }, [isMobile]);
-
-  // Ensure index is within bounds if screen size suddenly changes
-  const activeIndex = Math.min(pageIndex, displayPages.length - 1);
-  const page = displayPages[activeIndex];
+  const page = pages[pageIndex];
 
   function handleNext() {
     if (isAnimating) return;
+    
+    // Confetti on click to make interactions feel more alive
+    confetti({
+      particleCount: 40,
+      spread: 60,
+      origin: { x: Math.random() * 0.6 + 0.2, y: 0.8 },
+      colors: ['#ff4d97', '#ff7cb4', '#ffffff', '#ffd700'],
+    });
+
     setIsAnimating(true);
     setTimeout(() => {
-      if (activeIndex === displayPages.length - 1) {
+      if (pageIndex === pages.length - 1) {
         onFinish();
       } else {
-        setPageIndex(activeIndex + 1);
+        setPageIndex(pageIndex + 1);
       }
       setIsAnimating(false);
     }, 450);
@@ -151,6 +193,7 @@ function GiftCard({ onFinish }) {
 
   return (
     <div className="gift-card-screen" onClick={handleNext}>
+      <FloatingElements />
       <div className={`gift-card ${isAnimating ? 'flipping' : ''}`}>
         <div className="card-header">{page.title}</div>
         <div className="media-grid">
@@ -165,8 +208,7 @@ function GiftCard({ onFinish }) {
           ))}
         </div>
         <div className="card-footer">
-          <span>{page.caption}</span>
-          <span>{page.hint}</span>
+          <span>{page.hint || 'Tap to proceed...'}</span>
         </div>
       </div>
     </div>
