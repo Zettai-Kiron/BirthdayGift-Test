@@ -29,7 +29,7 @@ const pages = [
     hint: 'Tap anywhere for the surprise',
   },
   {
-    title: 'You are my favorite story.',
+    title: 'You are a wonderful favorite story.',
     media: [
       { type: 'image', src: '/media/Pic6.jpg', alt: 'Birthday Photo 6' },
       { type: 'video', src: '/media/Vid3.mp4', alt: 'Birthday Video 3' },
@@ -101,7 +101,7 @@ function HeartIntro({ onComplete }) {
       <canvas ref={canvasRef} className="heart-canvas" />
       <div className="countdown">{count >= 0 ? count : ''}</div>
       <div className="hero-text">Happy Birthday</div>
-      <div className="subtext">Your surprise is on the way...</div>
+      <div className="subtext">Let's celebrate begin shall we?</div>
     </div>
   );
 }
