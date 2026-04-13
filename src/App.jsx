@@ -99,7 +99,7 @@ function HeartIntro({ onComplete }) {
     <div className="hero-screen">
       <canvas ref={canvasRef} className="heart-canvas" />
       <div className="countdown">{count >= 0 ? count : ''}</div>
-      <div className="hero-text">Happy Birthday Dear</div>
+      <div className="hero-text">Happy Birthday Love</div>
       <div className="subtext">Let's start the celebration!🥳🥳</div>
     </div>
   );
@@ -289,7 +289,7 @@ function Fireworks() {
     <div className="fireworks-screen">
       <canvas ref={canvasRef} className="fireworks-canvas" />
       <div className="final-message">
-        <h1>Happy Birthday Dear!</h1>
+        <h1>Happy Birthday ❤️!</h1>
         <p>The Story continues. The future is definitely going to be great</p>
       </div>
     </div>
