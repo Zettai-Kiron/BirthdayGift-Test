@@ -17,7 +17,7 @@ body {
 
 .app-shell {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   position: relative;
   background: radial-gradient(circle at top, rgba(138, 80, 187, 0.18), transparent 18%),
     radial-gradient(circle at 20% 20%, rgba(255, 100, 196, 0.14), transparent 20%),
@@ -89,7 +89,7 @@ body {
 .gift-card {
   width: min(1000px, 92vw);
   max-width: 1080px;
-  height: min(740px, 84vh);
+  height: min(740px, 84dvh);
   background: rgba(7, 12, 27, 0.96);
   border-radius: 36px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -128,14 +128,14 @@ body {
   }
 
   .gift-card {
-    width: 95vw;
-    height: 90vh;
-    border-radius: 24px;
+    width: 92vw;
+    height: 88dvh;
+    border-radius: 20px;
   }
 
   .card-header {
-    padding: 24px 20px;
-    font-size: clamp(1rem, 4vw, 1.5rem);
+    padding: 24px 20px 16px;
+    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
   }
 
   .media-grid {
@@ -144,7 +144,7 @@ body {
   }
 
   .card-footer {
-    padding: 16px 20px 20px;
+    padding: 16px 20px;
     font-size: 0.9rem;
   }
 }

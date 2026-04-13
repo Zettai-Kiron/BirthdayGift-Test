@@ -109,16 +109,41 @@ function HeartIntro({ onComplete }) {
 function GiftCard({ onFinish }) {
   const [pageIndex, setPageIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const page = pages[pageIndex];
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const displayPages = useMemo(() => {
+    if (!isMobile) return pages;
+    const flatPages = [];
+    pages.forEach((p) => {
+      p.media.forEach((m, idx) => {
+        flatPages.push({
+          ...p,
+          media: [m],
+          caption: p.media.length > 1 ? `${p.caption} (${idx + 1}/${p.media.length})` : p.caption,
+        });
+      });
+    });
+    return flatPages;
+  }, [isMobile]);
+
+  // Ensure index is within bounds if screen size suddenly changes
+  const activeIndex = Math.min(pageIndex, displayPages.length - 1);
+  const page = displayPages[activeIndex];
 
   function handleNext() {
     if (isAnimating) return;
     setIsAnimating(true);
     setTimeout(() => {
-      if (pageIndex === pages.length - 1) {
+      if (activeIndex === displayPages.length - 1) {
         onFinish();
       } else {
-        setPageIndex(pageIndex + 1);
+        setPageIndex(activeIndex + 1);
       }
       setIsAnimating(false);
     }, 450);
