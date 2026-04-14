@@ -82,7 +82,10 @@ function HeartIntro({ onComplete }) {
     return () => window.removeEventListener('resize', resize);
   }, []);
 
+  const [started, setStarted] = useState(false);
+
   useEffect(() => {
+    if (!started) return;
     if (count < 0) {
       onComplete();
       return;
@@ -93,12 +96,29 @@ function HeartIntro({ onComplete }) {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [count, onComplete]);
+  }, [count, started, onComplete]);
+
+  function handleStart() {
+    if (!started) {
+      setStarted(true);
+      const audio = document.getElementById('bg-music');
+      if (audio) {
+        audio.play().then(() => {
+          audio.pause();
+          audio.currentTime = 0;
+        }).catch(e => console.log('Audio init failed:', e));
+      }
+    }
+  }
 
   return (
-    <div className="hero-screen">
+    <div className="hero-screen" onClick={handleStart} style={{ cursor: started ? 'default' : 'pointer' }}>
       <canvas ref={canvasRef} className="heart-canvas" />
-      <div className="countdown">{count >= 0 ? count : ''}</div>
+      {!started ? (
+        <div className="countdown" style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', whiteSpace: 'nowrap' }}>Tap to Start</div>
+      ) : (
+        <div className="countdown">{count >= 0 ? count : ''}</div>
+      )}
       <div className="hero-text">Happy Birthday Love</div>
       <div className="subtext">Let's start the celebration!🥳🥳</div>
     </div>
