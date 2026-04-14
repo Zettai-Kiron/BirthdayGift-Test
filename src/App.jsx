@@ -152,6 +152,11 @@ function GiftCard({ onFinish }) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
+    const audio = document.getElementById('bg-music');
+    if (audio) {
+      audio.play().catch((e) => console.log('Audio autoplay blocked, will play on click', e));
+    }
+
     // Periodic subtle confetti pops
     const interval = setInterval(() => {
       confetti({
@@ -171,6 +176,11 @@ function GiftCard({ onFinish }) {
 
   function handleNext() {
     if (isAnimating) return;
+
+    const audio = document.getElementById('bg-music');
+    if (audio && audio.paused) {
+      audio.play().catch(e => console.log(e));
+    }
 
     // Confetti on click to make interactions feel more alive
     confetti({
@@ -305,5 +315,11 @@ export default function App() {
     return <Fireworks />;
   }, [stage]);
 
-  return <div className="app-shell">{content}</div>;
+  return (
+    <div className="app-shell">
+      {content}
+      <audio id="bg-music" src="/media/music1.mp3" loop />
+    </div>
+  );
 }
+

@@ -49,7 +49,7 @@ body {
 
 .countdown {
   position: absolute;
-  top: 50%;
+  top: 58%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: clamp(4rem, 12vw, 11rem);
@@ -60,9 +60,10 @@ body {
 
 .hero-text {
   position: absolute;
-  top: 24%;
+  top: 15%;
   left: 50%;
   transform: translateX(-50%);
+  width: 90%;
   font-size: clamp(2rem, 4vw, 5rem);
   letter-spacing: 0.1em;
   color: #ffffff;
@@ -72,9 +73,10 @@ body {
 
 .subtext {
   position: absolute;
-  top: 38%;
+  top: 30%;
   left: 50%;
   transform: translateX(-50%);
+  width: 90%;
   color: rgba(255, 255, 255, 0.75);
   font-size: clamp(1rem, 1.7vw, 1.5rem);
 }
@@ -197,15 +199,18 @@ body {
 }
 
 .final-message h1 {
-  margin: 0 0 16px;
+  margin: 0 0 40px;
   font-size: clamp(3rem, 6vw, 6rem);
   letter-spacing: 0.08em;
+  padding: 0 20px;
 }
 
 .final-message p {
   margin: 0;
   font-size: clamp(1.1rem, 1.8vw, 1.5rem);
   color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  padding: 0 20px;
 }
 
 .floating-container {
