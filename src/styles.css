@@ -49,7 +49,7 @@ body {
 
 .countdown {
   position: absolute;
-  top: 58%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: clamp(4rem, 12vw, 11rem);
@@ -60,7 +60,7 @@ body {
 
 .hero-text {
   position: absolute;
-  top: 15%;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
@@ -73,7 +73,7 @@ body {
 
 .subtext {
   position: absolute;
-  top: 30%;
+  top: 45%;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
