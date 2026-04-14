@@ -340,8 +340,9 @@ function TurtleHeart() {
     function resize() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      startDrawing();
     }
+    resize();
+    window.addEventListener('resize', resize);
 
     function hearta(k) {
       return 15 * Math.pow(Math.sin(k), 3);
@@ -352,58 +353,57 @@ function TurtleHeart() {
     }
 
     let i = 0;
+    const steps = 300; // ~5 seconds per loop
+    let path = [];
+
     function startDrawing() {
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
 
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
 
-      let prevX = centerX;
-      let prevY = centerY;
-
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
       function drawStep() {
-        if (i < 300) {
-          const k = i;
-          const x = centerX + hearta(k) * 20;
-          const y = centerY - heartb(k) * 20; // negative to flip Y axis
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // Draw line
-          ctx.strokeStyle = 'red';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(prevX, prevY);
-          ctx.lineTo(x, y);
-          ctx.stroke();
-
-          // Draw dot
-          ctx.fillStyle = 'red';
-          ctx.beginPath();
-          ctx.arc(x, y, 3, 0, Math.PI * 2);
-          ctx.fill();
-
-          prevX = x;
-          prevY = y;
-          i++;
-          animationFrameId = requestAnimationFrame(drawStep);
-        } else {
-          // goto(0, 0)
-          ctx.strokeStyle = 'red';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(prevX, prevY);
-          ctx.lineTo(centerX, centerY);
-          ctx.stroke();
+        if (i > steps) {
+            i = 0;
+            path = [];
         }
+
+        const k = (i / steps) * Math.PI * 2;
+        const x = centerX + hearta(k) * 20;
+        const y = centerY - heartb(k) * 20; 
+        
+        path.push({x, y});
+
+        if (path.length > 0) {
+            ctx.strokeStyle = '#f73487';
+            ctx.lineWidth = 2;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(path[0].x, path[0].y);
+            for (let j = 1; j < path.length; j++) {
+                ctx.lineTo(path[j].x, path[j].y);
+            }
+            ctx.stroke();
+
+            // Draw dot
+            ctx.fillStyle = '#f73487';
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        i++;
+        animationFrameId = requestAnimationFrame(drawStep);
       }
-      i = 0;
+      
       drawStep();
     }
-
-    window.addEventListener('resize', resize);
-    resize();
+    
+    startDrawing();
 
     return () => {
       window.removeEventListener('resize', resize);
